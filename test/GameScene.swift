@@ -8,6 +8,11 @@
 import SpriteKit
 import GameplayKit
 
+class GameScenes {
+    
+    
+}
+
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var ship: SKSpriteNode?
@@ -20,23 +25,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     override func didMove(to view: SKView) {
         
+    
+
         
+        self.portal = self.childNode(withName: "portal") as? SKSpriteNode
         self.ship = self.childNode(withName: "ship") as? SKSpriteNode
         self.fuel = self.childNode(withName: "fuel") as? SKSpriteNode
-        self.portal = self.childNode(withName: "portal") as? SKSpriteNode
         self.label = self.childNode(withName: "label") as? SKLabelNode
-        
-        
-      
         
 
     
         physicsWorld.contactDelegate = self
         
     
-        
-
-        
+    
         
        
     }
@@ -88,11 +90,35 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         self.label?.run(SKAction.fadeOut(withDuration: 5.0))
         
-        
+        spawnRestartButton()
         
         
         
     }
+    
+    func setNewScene() {
+        
+        let newScene = GameScene()
+        let animation = SKTransition.fade(withDuration: 1)
+        self.view?.presentScene(newScene, transition: animation)
+        
+        
+    }
+    
+    func spawnRestartButton() {
+        
+        let RestartButton = SKSpriteNode(imageNamed: "restart")
+        RestartButton.name = "rstrt"
+        RestartButton.size = CGSize(width: 100, height: 100)
+        RestartButton.position = CGPoint(x: 0, y: 0)
+        RestartButton.zPosition = 1
+        addChild(RestartButton)
+        
+        
+    }
+    
+    
+    
     
     func didBegin(_ contact: SKPhysicsContact) {
         
@@ -223,6 +249,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
             
             let position = touch.location(in: self)
+            let touchedNode = nodes(at: position)
+            
+            if let name = touchedNode[0].name {
+                
+                if name == "rstrt" {
+                    
+                    let newScene = GameScene(size: self.size)
+                    self.view?.presentScene(newScene)
+                    
+                }
+                
+                
+            }
+            
+            
             
             if position.x > 0 {
                 
